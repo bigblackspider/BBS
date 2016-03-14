@@ -1,0 +1,615 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BBSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MiddleNames" Type="nchar" MaxLength="200" />
+          <Property Name="FamilyName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nchar" MaxLength="10" />
+          <Property Name="Mobile" Type="nchar" MaxLength="10" />
+          <Property Name="Fax" Type="nchar" MaxLength="10" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CustomerWebsite" Type="nvarchar" MaxLength="100" />
+          <Property Name="Status" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="CustomerPreoduct">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MailAccount">
+          <Key>
+            <PropertyRef Name="MailAccountId" />
+          </Key>
+          <Property Name="MailAccountId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MailBoxId" Type="int" Nullable="false" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Forwarding" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaxSizeMB" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" />
+          <Property Name="Status" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="MailAliasName">
+          <Key>
+            <PropertyRef Name="MailAliasNameId" />
+          </Key>
+          <Property Name="MailAliasNameId" Type="int" Nullable="false" />
+          <Property Name="MailBoxId" Type="int" Nullable="false" />
+          <Property Name="AliasName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MailBox">
+          <Key>
+            <PropertyRef Name="MailBoxId" />
+          </Key>
+          <Property Name="MailBoxId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="DomainName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MaxMessageSizeKB" Type="int" Nullable="false" />
+          <Property Name="MaxAccountSizeMB" Type="int" Nullable="false" />
+          <Property Name="MaxAccounts" Type="int" Nullable="false" />
+          <Property Name="CatchAllAddress" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="ExpiryDate" Type="datetime" />
+          <Property Name="Status" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Website">
+          <Key>
+            <PropertyRef Name="WebsiteId" />
+          </Key>
+          <Property Name="WebsiteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="DomainName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="ExpiryDate" Type="datetime" />
+          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="WebsiteItem">
+          <Key>
+            <PropertyRef Name="WebsiteItemId" />
+          </Key>
+          <Property Name="WebsiteItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemName" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="ItemValue" Type="varchar(max)" Nullable="false" />
+          <Property Name="WebsiteId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CustomerPreoduct_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="CustomerPreoduct" Type="Self.CustomerPreoduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="CustomerPreoduct">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerProduct_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CustomerPreoduct" Type="Self.CustomerPreoduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="CustomerPreoduct">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MailAccount_Mail">
+          <End Role="MailBox" Type="Self.MailBox" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="MailAccount" Type="Self.MailAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailBox">
+              <PropertyRef Name="MailBoxId" />
+            </Principal>
+            <Dependent Role="MailAccount">
+              <PropertyRef Name="MailBoxId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MailAlias_Mail">
+          <End Role="MailBox" Type="Self.MailBox" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="MailAliasName" Type="Self.MailAliasName" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailBox">
+              <PropertyRef Name="MailBoxId" />
+            </Principal>
+            <Dependent Role="MailAliasName">
+              <PropertyRef Name="MailBoxId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MailBox_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="MailBox" Type="Self.MailBox" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="MailBox">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Website_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Website" Type="Self.Website" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="Website">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WebsiteItem_Website">
+          <End Role="Website" Type="Self.Website" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="WebsiteItem" Type="Self.WebsiteItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Website">
+              <PropertyRef Name="WebsiteId" />
+            </Principal>
+            <Dependent Role="WebsiteItem">
+              <PropertyRef Name="WebsiteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BBSModelStoreContainer">
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerPreoduct" EntityType="Self.CustomerPreoduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MailAccount" EntityType="Self.MailAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MailAliasName" EntityType="Self.MailAliasName" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MailBox" EntityType="Self.MailBox" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Website" EntityType="Self.Website" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WebsiteItem" EntityType="Self.WebsiteItem" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CustomerPreoduct_Product" Association="Self.FK_CustomerPreoduct_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="CustomerPreoduct" EntitySet="CustomerPreoduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerProduct_Customer" Association="Self.FK_CustomerProduct_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="CustomerPreoduct" EntitySet="CustomerPreoduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MailAccount_Mail" Association="Self.FK_MailAccount_Mail">
+            <End Role="MailBox" EntitySet="MailBox" />
+            <End Role="MailAccount" EntitySet="MailAccount" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MailAlias_Mail" Association="Self.FK_MailAlias_Mail">
+            <End Role="MailBox" EntitySet="MailBox" />
+            <End Role="MailAliasName" EntitySet="MailAliasName" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MailBox_Customer" Association="Self.FK_MailBox_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="MailBox" EntitySet="MailBox" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Website_Customer" Association="Self.FK_Website_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Website" EntitySet="Website" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WebsiteItem_Website" Association="Self.FK_WebsiteItem_Website">
+            <End Role="Website" EntitySet="Website" />
+            <End Role="WebsiteItem" EntitySet="WebsiteItem" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BBSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="BBSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="BBSModel.Customer" />
+          <EntitySet Name="CustomerPreoducts" EntityType="BBSModel.CustomerPreoduct" />
+          <EntitySet Name="MailAccounts" EntityType="BBSModel.MailAccount" />
+          <EntitySet Name="MailAliasNames" EntityType="BBSModel.MailAliasName" />
+          <EntitySet Name="MailBoxes" EntityType="BBSModel.MailBox" />
+          <EntitySet Name="Products" EntityType="BBSModel.Product" />
+          <EntitySet Name="WebsiteItems" EntityType="BBSModel.WebsiteItem" />
+          <AssociationSet Name="FK_CustomerProduct_Customer" Association="BBSModel.FK_CustomerProduct_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="CustomerPreoduct" EntitySet="CustomerPreoducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MailBox_Customer" Association="BBSModel.FK_MailBox_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="MailBox" EntitySet="MailBoxes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerPreoduct_Product" Association="BBSModel.FK_CustomerPreoduct_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="CustomerPreoduct" EntitySet="CustomerPreoducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MailAccount_Mail" Association="BBSModel.FK_MailAccount_Mail">
+            <End Role="MailBox" EntitySet="MailBoxes" />
+            <End Role="MailAccount" EntitySet="MailAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MailAlias_Mail" Association="BBSModel.FK_MailAlias_Mail">
+            <End Role="MailBox" EntitySet="MailBoxes" />
+            <End Role="MailAliasName" EntitySet="MailAliasNames" />
+          </AssociationSet>
+          <EntitySet Name="Websites" EntityType="BBSModel.Website" />
+          <AssociationSet Name="FK_Website_Customer" Association="BBSModel.FK_Website_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Website" EntitySet="Websites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WebsiteItem_Website" Association="BBSModel.FK_WebsiteItem_Website">
+            <End Role="Website" EntitySet="Websites" />
+            <End Role="WebsiteItem" EntitySet="WebsiteItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleNames" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="FamilyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerWebsite" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Precision="3" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CustomerPreoducts" Relationship="BBSModel.FK_CustomerProduct_Customer" FromRole="Customer" ToRole="CustomerPreoduct" />
+          <NavigationProperty Name="MailBoxes" Relationship="BBSModel.FK_MailBox_Customer" FromRole="Customer" ToRole="MailBox" />
+          <NavigationProperty Name="Websites" Relationship="BBSModel.FK_Website_Customer" FromRole="Customer" ToRole="Website" />
+        </EntityType>
+        <EntityType Name="CustomerPreoduct">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Customer" Relationship="BBSModel.FK_CustomerProduct_Customer" FromRole="CustomerPreoduct" ToRole="Customer" />
+          <NavigationProperty Name="Product" Relationship="BBSModel.FK_CustomerPreoduct_Product" FromRole="CustomerPreoduct" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="MailAccount">
+          <Key>
+            <PropertyRef Name="MailAccountId" />
+          </Key>
+          <Property Name="MailAccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MailBoxId" Type="Int32" Nullable="false" />
+          <Property Name="AccountName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Forwarding" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaxSizeMB" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="MailBox" Relationship="BBSModel.FK_MailAccount_Mail" FromRole="MailAccount" ToRole="MailBox" />
+        </EntityType>
+        <EntityType Name="MailAliasName">
+          <Key>
+            <PropertyRef Name="MailAliasNameId" />
+          </Key>
+          <Property Name="MailAliasNameId" Type="Int32" Nullable="false" />
+          <Property Name="MailBoxId" Type="Int32" Nullable="false" />
+          <Property Name="AliasName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MailBox" Relationship="BBSModel.FK_MailAlias_Mail" FromRole="MailAliasName" ToRole="MailBox" />
+        </EntityType>
+        <EntityType Name="MailBox">
+          <Key>
+            <PropertyRef Name="MailBoxId" />
+          </Key>
+          <Property Name="MailBoxId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="DomainName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaxMessageSizeKB" Type="Int32" Nullable="false" />
+          <Property Name="MaxAccountSizeMB" Type="Int32" Nullable="false" />
+          <Property Name="MaxAccounts" Type="Int32" Nullable="false" />
+          <Property Name="CatchAllAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="BBSModel.FK_MailBox_Customer" FromRole="MailBox" ToRole="Customer" />
+          <NavigationProperty Name="MailAccounts" Relationship="BBSModel.FK_MailAccount_Mail" FromRole="MailBox" ToRole="MailAccount" />
+          <NavigationProperty Name="MailAliasNames" Relationship="BBSModel.FK_MailAlias_Mail" FromRole="MailBox" ToRole="MailAliasName" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="CustomerPreoducts" Relationship="BBSModel.FK_CustomerPreoduct_Product" FromRole="Product" ToRole="CustomerPreoduct" />
+        </EntityType>
+        <EntityType Name="WebsiteItem">
+          <Key>
+            <PropertyRef Name="WebsiteItemId" />
+          </Key>
+          <Property Name="WebsiteItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemName" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="ItemValue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="WebsiteId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Website" Relationship="BBSModel.FK_WebsiteItem_Website" FromRole="WebsiteItem" ToRole="Website" />
+        </EntityType>
+        <Association Name="FK_CustomerProduct_Customer">
+          <End Type="BBSModel.Customer" Role="Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BBSModel.CustomerPreoduct" Role="CustomerPreoduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="CustomerPreoduct">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MailBox_Customer">
+          <End Type="BBSModel.Customer" Role="Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BBSModel.MailBox" Role="MailBox" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="MailBox">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerPreoduct_Product">
+          <End Type="BBSModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="BBSModel.CustomerPreoduct" Role="CustomerPreoduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="CustomerPreoduct">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MailAccount_Mail">
+          <End Type="BBSModel.MailBox" Role="MailBox" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BBSModel.MailAccount" Role="MailAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailBox">
+              <PropertyRef Name="MailBoxId" />
+            </Principal>
+            <Dependent Role="MailAccount">
+              <PropertyRef Name="MailBoxId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MailAlias_Mail">
+          <End Type="BBSModel.MailBox" Role="MailBox" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BBSModel.MailAliasName" Role="MailAliasName" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailBox">
+              <PropertyRef Name="MailBoxId" />
+            </Principal>
+            <Dependent Role="MailAliasName">
+              <PropertyRef Name="MailBoxId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Website">
+          <Key>
+            <PropertyRef Name="WebsiteId" />
+          </Key>
+          <Property Name="WebsiteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="DomainName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="BBSModel.FK_Website_Customer" FromRole="Website" ToRole="Customer" />
+          <NavigationProperty Name="WebsiteItems" Relationship="BBSModel.FK_WebsiteItem_Website" FromRole="Website" ToRole="WebsiteItem" />
+        </EntityType>
+        <Association Name="FK_Website_Customer">
+          <End Type="BBSModel.Customer" Role="Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BBSModel.Website" Role="Website" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="Website">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WebsiteItem_Website">
+          <End Type="BBSModel.Website" Role="Website" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BBSModel.WebsiteItem" Role="WebsiteItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Website">
+              <PropertyRef Name="WebsiteId" />
+            </Principal>
+            <Dependent Role="WebsiteItem">
+              <PropertyRef Name="WebsiteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BBSModelStoreContainer" CdmEntityContainer="BBSEntities">
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="BBSModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CustomerWebsite" ColumnName="CustomerWebsite" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
+                <ScalarProperty Name="MiddleNames" ColumnName="MiddleNames" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerPreoducts">
+            <EntityTypeMapping TypeName="BBSModel.CustomerPreoduct">
+              <MappingFragment StoreEntitySet="CustomerPreoduct">
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MailAccounts">
+            <EntityTypeMapping TypeName="BBSModel.MailAccount">
+              <MappingFragment StoreEntitySet="MailAccount">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="MaxSizeMB" ColumnName="MaxSizeMB" />
+                <ScalarProperty Name="Forwarding" ColumnName="Forwarding" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="MailBoxId" ColumnName="MailBoxId" />
+                <ScalarProperty Name="MailAccountId" ColumnName="MailAccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MailAliasNames">
+            <EntityTypeMapping TypeName="BBSModel.MailAliasName">
+              <MappingFragment StoreEntitySet="MailAliasName">
+                <ScalarProperty Name="AliasName" ColumnName="AliasName" />
+                <ScalarProperty Name="MailBoxId" ColumnName="MailBoxId" />
+                <ScalarProperty Name="MailAliasNameId" ColumnName="MailAliasNameId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MailBoxes">
+            <EntityTypeMapping TypeName="BBSModel.MailBox">
+              <MappingFragment StoreEntitySet="MailBox">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="CatchAllAddress" ColumnName="CatchAllAddress" />
+                <ScalarProperty Name="MaxAccounts" ColumnName="MaxAccounts" />
+                <ScalarProperty Name="MaxAccountSizeMB" ColumnName="MaxAccountSizeMB" />
+                <ScalarProperty Name="MaxMessageSizeKB" ColumnName="MaxMessageSizeKB" />
+                <ScalarProperty Name="DomainName" ColumnName="DomainName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="MailBoxId" ColumnName="MailBoxId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="BBSModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WebsiteItems">
+            <EntityTypeMapping TypeName="BBSModel.WebsiteItem">
+              <MappingFragment StoreEntitySet="WebsiteItem">
+                <ScalarProperty Name="WebsiteId" ColumnName="WebsiteId" />
+                <ScalarProperty Name="ItemValue" ColumnName="ItemValue" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="WebsiteItemId" ColumnName="WebsiteItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Websites">
+            <EntityTypeMapping TypeName="BBSModel.Website">
+              <MappingFragment StoreEntitySet="Website">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DomainName" ColumnName="DomainName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="WebsiteId" ColumnName="WebsiteId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
